@@ -62,4 +62,17 @@ public class PlayerAnimationHandler : PlayerHandler
     {
         playerAnimController.SetBool("isGrounded", isGrounded);       
     }
+
+    public void PlayEmote(int emoteIndex)
+    {
+        playerAnimController.SetFloat("EmoteIndex", emoteIndex);        
+    }
+
+    IEnumerator EmoteCooldown()
+    {
+        yield return new WaitForSeconds(2.0f);
+        playerAnimController.SetFloat("EmoteIndex", 0);
+
+    }
+
 }
