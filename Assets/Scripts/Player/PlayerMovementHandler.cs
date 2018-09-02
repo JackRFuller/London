@@ -10,9 +10,7 @@ public class PlayerMovementHandler : PlayerHandler
     [SerializeField]
     private float walkSpeed = 4.5f;
     [SerializeField]
-    private float runSpeed = 7;
-    [SerializeField]
-    private float turnSmoothTime = 0.2f;
+    private float runSpeed = 7;    
     [SerializeField]
     private float speedSmoothTime = 0.1f;
     [SerializeField]
