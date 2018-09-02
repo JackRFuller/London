@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class PlayerInputHandler : PlayerHandler
 {
+    private float inputX;
+    private float inputY;
+    private float inputXRaw;
+    private float inputYRaw;
+
     private bool isSprinting;
 
     public bool IsSprinting
@@ -15,6 +20,34 @@ public class PlayerInputHandler : PlayerHandler
 
        
     }
+    public float InputX
+    {
+        get
+        {
+            return inputX;
+        }        
+    }
+    public float InputY
+    {
+        get
+        {
+            return inputY;
+        }
+    }
+    public float InputXRaw
+    {
+        get
+        {
+            return inputXRaw;
+        }
+    }
+    public float InputYRaw
+    {
+        get
+        {
+            return inputYRaw;
+        }
+    }
 
     private void Update()
     {
@@ -22,10 +55,11 @@ public class PlayerInputHandler : PlayerHandler
 
         GetJumpInput();
 
+        GetRollInput();
+
         GetSprintInput();
 
         GetThrowShieldInput();
-
     }
 
     private void LateUpdate()
@@ -35,15 +69,11 @@ public class PlayerInputHandler : PlayerHandler
 
     private void GetMovementInput()
     {
-        float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
+        inputX = Input.GetAxis("Horizontal");
+        inputY = Input.GetAxis("Vertical");
 
-        float xRaw = Input.GetAxisRaw("Horizontal");
-        float yRaw = Input.GetAxisRaw("Vertical");
-
-        Vector2 direction = new Vector2(x, y);
-        Vector2 directionRaw = new Vector2(xRaw, yRaw);
-        playerView.PlayerMovementHandler.SetMovementDirection(direction,directionRaw);
+        inputXRaw = Input.GetAxisRaw("Horizontal");
+        inputYRaw = Input.GetAxisRaw("Vertical");
     }
 
     private void GetSprintInput()
@@ -54,6 +84,14 @@ public class PlayerInputHandler : PlayerHandler
         }
         else
             isSprinting = false;
+    }
+
+    private void GetRollInput()
+    {
+        if(Input.GetKeyDown(KeyCode.LeftAlt))
+        {
+            playerView.PlayerMovementHandler.Roll();
+        }
     }
 
     private void GetJumpInput()

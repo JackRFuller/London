@@ -29,20 +29,31 @@ public class PlayerMovementHandler : PlayerHandler
     private Vector3 velocity;
     private float velocityY;
 
+    private bool isRolling;
+
     protected override void Start()
     {
         base.Start();       
         playerCC = GetComponent<CharacterController>();      
     }
 
-    public void SetMovementDirection(Vector2 inputDirection, Vector2 inputDirectionRaw)
+    private void Update()
     {
+        SetMovementDirection();
+    }
+
+    public void SetMovementDirection()
+    {
+        playerView.PlayerAnimationHandler.SetGroundedState(IsPlayerGrounded());
+
+        Vector2 inputDirection = GetPlayerInput();
+        Vector2 inputDirectionRaw = GetPlayerRawInput();
+
         Vector3 moveDirection = Vector3.zero;
         moveDirection.x = inputDirection.x;
         moveDirection.z = inputDirection.y;        
 
         moveDirection = transform.TransformDirection(moveDirection);
-        Debug.Log(moveDirection);
         bool running = playerView.PlayerInputHandler.IsSprinting;        
 
         float targetSpeed = ((running) ? runSpeed : walkSpeed);
@@ -51,6 +62,11 @@ public class PlayerMovementHandler : PlayerHandler
         velocityY += Time.deltaTime * gravity;
         moveDirection = moveDirection * currentSpeed + Vector3.up * velocityY;       
 
+        if(isRolling)
+        {
+            moveDirection *= 2;
+        }
+
         float targetRotation = playerView.PlayerCameraHandler.CameraTransform.eulerAngles.y;
         transform.eulerAngles = new Vector3(transform.eulerAngles.x,targetRotation,transform.eulerAngles.z);
 
@@ -58,30 +74,56 @@ public class PlayerMovementHandler : PlayerHandler
         playerCC.Move(moveDirection * Time.deltaTime);
         playerView.PlayerAnimationHandler.SetMovementAnimations(playerCC.velocity, running,inputDirection, inputDirectionRaw);
 
-
-        
-
-        //Vector3 velocity = transform.forward * currentSpeed + Vector3.up * velocityY;       
-
-        //playerView.PlayerAnimationHandler.SetMovementAnimation(running, inputDirection,speedSmoothTime,playerCC.velocity,runSpeed,walkSpeed);
-
-        
-
         if(IsPlayerGrounded())
         {
-            velocityY = 0;
+            velocityY = 0;            
         }
-       
     }
 
     public void Jump()
     {
         if(IsPlayerGrounded())
         {
+            bool running = playerView.PlayerInputHandler.IsSprinting;
             float jumpVelocity = Mathf.Sqrt(-2 * gravity * jumpHeight);
+
+            if (running)
+                jumpVelocity *= 1f;
+
             velocityY = jumpVelocity;
+
+            playerView.PlayerAnimationHandler.Jump();
         }
-    }    
+    }
+
+    public void Roll()
+    {
+        if(!isRolling)
+        {
+            isRolling = true;
+            playerView.PlayerAnimationHandler.Roll();
+            StartCoroutine(RollingCoolDown());
+        }
+            
+    }
+
+    IEnumerator RollingCoolDown()
+    {
+        yield return new WaitForSeconds(0.5f);
+        isRolling = false;
+    }
+
+    
+    
+    private Vector2 GetPlayerInput()
+    {
+        return new Vector2(playerView.PlayerInputHandler.InputX, playerView.PlayerInputHandler.InputY);
+    }
+
+    private Vector2 GetPlayerRawInput()
+    {
+        return new Vector2(playerView.PlayerInputHandler.InputXRaw, playerView.PlayerInputHandler.InputYRaw);
+    }
 
     private float GetModifiedSmoothTime(float smoothTime)
     {

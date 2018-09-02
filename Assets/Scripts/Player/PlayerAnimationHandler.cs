@@ -25,7 +25,7 @@ public class PlayerAnimationHandler : PlayerHandler
 
     public void SetMovementAnimations(Vector3 controllerVelocity,bool isRunning,Vector2 inputDir,Vector2 inputDirRaw)
     {
-        int movementSpeed = 0;
+        float movementSpeed = 0;
 
         if(inputDirRaw == Vector2.zero)
         {
@@ -42,14 +42,24 @@ public class PlayerAnimationHandler : PlayerHandler
                 movementSpeed = 1;
             }           
         }
-        playerAnimController.SetInteger("movementSpeed", movementSpeed);
-        playerAnimController.SetBool("isSprinting", isRunning);
+        playerAnimController.SetFloat("movementSpeedFloat",movementSpeed);
+        playerAnimController.SetInteger("movementSpeed", (int)movementSpeed);        
         playerAnimController.SetFloat("directionX", inputDir.x);
         playerAnimController.SetFloat("directionY", inputDir.y);
     }
 
-    public void Jump(bool isIdle)
+    public void Jump()
     {
+        playerAnimController.SetTrigger("Jump");
+    }
 
+    public void Roll()
+    {
+        playerAnimController.SetTrigger("Roll");
+    }
+
+    public void SetGroundedState(bool isGrounded)
+    {
+        playerAnimController.SetBool("isGrounded", isGrounded);       
     }
 }
