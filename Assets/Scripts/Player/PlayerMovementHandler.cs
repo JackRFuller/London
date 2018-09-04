@@ -31,6 +31,13 @@ public class PlayerMovementHandler : PlayerHandler
 
     private bool isRolling;
 
+    private MovementState movementState = MovementState.Free;
+    private enum MovementState
+    {
+        Frozen,
+        Free,
+    }
+
     protected override void Start()
     {
         base.Start();       
@@ -44,6 +51,9 @@ public class PlayerMovementHandler : PlayerHandler
 
     public void SetMovementDirection()
     {
+        if (movementState == MovementState.Frozen)
+            return;
+
         playerView.PlayerAnimationHandler.SetGroundedState(IsPlayerGrounded());
 
         Vector2 inputDirection = GetPlayerInput();
@@ -146,5 +156,16 @@ public class PlayerMovementHandler : PlayerHandler
     IEnumerator ResetTrigger(string trigger)
     {
         yield return new WaitForSeconds(0.4f);       
+    }
+
+    public void FreezeMovement()
+    {
+        movementState = MovementState.Frozen;
+    }
+
+    public void FreeMovement()
+    {
+        movementState = MovementState.Free;
+        Debug.Log("Free");
     }
 }

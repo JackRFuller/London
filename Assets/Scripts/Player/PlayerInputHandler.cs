@@ -61,6 +61,8 @@ public class PlayerInputHandler : PlayerHandler
 
         GetThrowShieldInput();
 
+        GetSummonShieldInput();
+
         GetEmoteInput();
     }
 
@@ -127,15 +129,34 @@ public class PlayerInputHandler : PlayerHandler
         {
             playerView.PlayerAnimationHandler.PlayEmote(3);
         }
-
-
     }
 
     private void GetThrowShieldInput()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (playerView.PlayerShieldHandler.ShieldEquippedState != PlayerShieldHandler.ShieldState.Held)
+            return;
+
+        if(Input.GetMouseButton(0))
         {
-            playerView.PlayerShieldHandler.ThrowShield();
+            playerView.PlayerShieldHandler.ChargeShieldThrow();
+            //playerView.PlayerShieldHandler.ThrowShield();
+        }
+        else if(Input.GetMouseButtonUp(0))
+        {
+            Debug.Log("Release");
+            playerView.PlayerMovementHandler.FreezeMovement();
+            playerView.PlayerAnimationHandler.ThrowShield();
+        }
+    }
+
+    private void GetSummonShieldInput()
+    {
+        if (playerView.PlayerShieldHandler.ShieldEquippedState != PlayerShieldHandler.ShieldState.Free)
+            return;
+
+        if(Input.GetMouseButtonDown(1))
+        {
+            playerView.PlayerShieldHandler.SummonShield();
         }
     }
 }

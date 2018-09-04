@@ -68,6 +68,11 @@ public class PlayerAnimationHandler : PlayerHandler
         playerAnimController.SetFloat("EmoteIndex", emoteIndex);        
     }
 
+    public void ThrowShield()
+    {
+        playerAnimController.SetTrigger("ThrowShield");
+    }
+
     IEnumerator EmoteCooldown()
     {
         yield return new WaitForSeconds(2.0f);

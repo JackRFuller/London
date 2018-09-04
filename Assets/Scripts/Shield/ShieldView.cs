@@ -4,16 +4,30 @@ using UnityEngine;
 
 public class ShieldView : MonoBehaviour
 {
-    Vector3 direction;
+    [SerializeField]
+    private PlayerView playerView;
 
-    public void SetDirection(Vector3 targetPoint)
+    private ShieldMovementHandler shieldMovementHandler;
+
+
+    public ShieldMovementHandler ShieldMovementHandler
     {
-        direction = targetPoint - this.transform.position;
-        direction.Normalize();
+        get
+        {
+            return shieldMovementHandler;
+        }
     }
 
-    private void Update()
+    public PlayerView PlayerView
     {
-        transform.Translate(direction * 20 * Time.deltaTime);
+        get
+        {
+            return playerView;
+        }
+    }
+
+    private void Start()
+    {
+        shieldMovementHandler = GetComponent<ShieldMovementHandler>();
     }
 }
