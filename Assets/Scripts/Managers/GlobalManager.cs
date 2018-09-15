@@ -12,6 +12,26 @@ public class GlobalManager : MonoBehaviour
 		}
 	}
 
+    [SerializeField]
+    private NetworkManager networkManager;
+    [SerializeField]
+    private UIManager uiManager;
+
+    public NetworkManager NetworkManager
+    {
+        get
+        {
+            return networkManager;
+        }
+    }
+    public UIManager UIManager
+    {
+        get
+        {
+            return uiManager;
+        }
+    }
+
 	private void Awake()
 	{
         instance = this;
