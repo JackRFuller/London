@@ -43,14 +43,17 @@ public class PlayerCameraHandler : PlayerHandler
         base.Start();
 
         //Setup Camera
-        GameObject playerCameraObj = new GameObject();
-        playerCameraObj.AddComponent<Camera>();
-        playerCamera = playerCameraObj.GetComponent<Camera>();
-        if (!playerView.photonView.isMine)
-            playerCameraObj.GetComponent<Camera>().enabled = false;
+        if (playerView.PhotonView.isMine)
+        {
+            GameObject playerCameraObj = new GameObject();
+            playerCameraObj.AddComponent<Camera>();
+            playerCamera = playerCameraObj.GetComponent<Camera>();
+            if (!playerView.photonView.isMine)
+                playerCameraObj.GetComponent<Camera>().enabled = false;
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 
 

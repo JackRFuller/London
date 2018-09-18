@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class ShieldMovementHandler : ShieldHandler
 {
-    
-
     private Transform startingPoint;
     private Vector3 travellingDirection;
-    private MovementState movementState = MovementState.Frozen;
+    private MovementState movementState = MovementState.Held;
     private enum MovementState
     {
         Free,
-        Frozen,
+        Held,
         Returning,
+        Frozen,
+
     }
 
     //Return
@@ -25,7 +25,7 @@ public class ShieldMovementHandler : ShieldHandler
         base.Start();
 
         GameObject startingPointObj = Instantiate(new GameObject(), this.transform.position, this.transform.rotation,this.transform.parent);
-        startingPoint = startingPointObj.transform;
+        startingPoint = shieldView.shieldHeldTransform;
     }
 
     public void ReleaseShield(Vector3 targetDirection)
@@ -60,7 +60,8 @@ public class ShieldMovementHandler : ShieldHandler
 
     private void Update()
     {
-        switch(movementState)
+        
+        switch (movementState)
         {
             case MovementState.Free:
                 Move();
@@ -68,7 +69,17 @@ public class ShieldMovementHandler : ShieldHandler
             case MovementState.Returning:
                 Return();
                 break;
+            case MovementState.Held:
+                SetHeldPosition();
+                break;
         }
+        
+    }
+
+    private void SetHeldPosition()
+    {
+        transform.position = shieldView.shieldHeldTransform.position;
+        transform.rotation = shieldView.shieldHeldTransform.rotation;
     }
 
     private void Move()
@@ -102,11 +113,8 @@ public class ShieldMovementHandler : ShieldHandler
 
         if(lerpingProgress >= 1.0f)
         {
-            movementState = MovementState.Frozen;
-            this.transform.parent = startingPoint.parent;
-            this.transform.position = startingPoint.position;
-            this.transform.rotation = startingPoint.rotation;
             shieldView.PlayerView.PlayerShieldHandler.SetShieldStateToHeld();
+            movementState = MovementState.Held;
         }
     }
 

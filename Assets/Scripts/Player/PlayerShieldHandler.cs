@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerShieldHandler : PlayerHandler
-{    
+{
     [SerializeField]
+    private Transform shieldSpawnPoint;    
     private ShieldView shieldView;
   
     private float shieldSpeed;
@@ -33,6 +34,21 @@ public class PlayerShieldHandler : PlayerHandler
         base.Start();
 
         shieldSpeed = shieldSpeedMin;
+
+        if(playerView.photonView.isMine)
+        {
+            SetupShield();
+        }
+    }
+
+    private void SetupShield()
+    {
+        GameObject shield = PhotonNetwork.Instantiate("Shield",transform.position,Quaternion.identity,0);
+        shieldView = shield.GetComponent<ShieldView>();
+
+        shieldView.SetControllingPlayerView(playerView,shieldSpawnPoint);
+
+        shield.name = "Shield";
     }
 
     public void ChargeShieldThrow()
@@ -40,25 +56,29 @@ public class PlayerShieldHandler : PlayerHandler
         shieldSpeed += 1 * Time.deltaTime;
         if (shieldSpeed > shieldSpeedMax)
             shieldSpeed = 10;
-
-        //Debug.Log(shieldSpeed);
     }
 
+    /// <summary>
+    /// Triggered from Animation Event on Throw SHield
+    /// </summary>
     public void ReleaseShield()
     {
-        Vector3 rayOrigin = playerView.PlayerCameraHandler.PlayerCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
-        RaycastHit hit;
-
-        Vector3 hitPoint = Vector3.zero;
-
-        Debug.DrawRay(rayOrigin, playerView.PlayerCameraHandler.CameraTransform.forward, Color.red, 5);
-        if (Physics.Raycast(rayOrigin, playerView.PlayerCameraHandler.CameraTransform.forward, out hit, Mathf.Infinity))
+        if(playerView.photonView.isMine)
         {
-            hitPoint = hit.point;
-        }
+            Vector3 rayOrigin = playerView.PlayerCameraHandler.PlayerCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
+            RaycastHit hit;
 
-        shieldView.ShieldMovementHandler.ReleaseShield(hit.point);
-        shieldEquippedState = ShieldState.Free;
+            Vector3 hitPoint = Vector3.zero;
+
+            Debug.DrawRay(rayOrigin, playerView.PlayerCameraHandler.CameraTransform.forward, Color.red, 5);
+            if (Physics.Raycast(rayOrigin, playerView.PlayerCameraHandler.CameraTransform.forward, out hit, Mathf.Infinity))
+            {
+                hitPoint = hit.point;
+            }
+
+            shieldView.ShieldMovementHandler.ReleaseShield(hit.point);
+            shieldEquippedState = ShieldState.Free;
+        }
     }
     
     public void SummonShield()

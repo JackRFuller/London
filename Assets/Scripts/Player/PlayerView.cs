@@ -76,7 +76,6 @@ public class PlayerView : Photon.MonoBehaviour
             playerInputHandler.enabled = false;
             playerMovementHandler.enabled = false;
             playerAnimationHandler.enabled = false;
-            playerShieldHandler.enabled = false;
         }
 	}
 
