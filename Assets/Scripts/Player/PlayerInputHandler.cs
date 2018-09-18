@@ -51,24 +51,32 @@ public class PlayerInputHandler : PlayerHandler
 
     private void Update()
     {
-        GetMovementInput();
+        if(playerView.PhotonView.isMine)
+        {
+            GetMovementInput();
 
-        GetJumpInput();
+            GetJumpInput();
 
-        GetRollInput();
+            GetRollInput();
 
-        GetSprintInput();
+            GetSprintInput();
 
-        GetThrowShieldInput();
+            GetThrowShieldInput();
 
-        GetSummonShieldInput();
+            GetSummonShieldInput();
 
-        GetEmoteInput();
+            GetEmoteInput();
+
+            GetQuitApplicationInput();
+        }
     }
 
     private void LateUpdate()
     {
-        GetCameraInput();
+        if(playerView.photonView.isMine)
+        {
+            GetCameraInput();
+        }
     }
 
     private void GetMovementInput()
@@ -157,6 +165,14 @@ public class PlayerInputHandler : PlayerHandler
         if(Input.GetMouseButtonDown(1))
         {
             playerView.PlayerShieldHandler.SummonShield();
+        }
+    }
+
+    private void GetQuitApplicationInput()
+    {
+        if(Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
         }
     }
 }

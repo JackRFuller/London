@@ -12,10 +12,10 @@ public class GlobalManager : MonoBehaviour
 		}
 	}
 
-    [SerializeField]
-    private NetworkManager networkManager;
-    [SerializeField]
+    
+    private NetworkManager networkManager;    
     private UIManager uiManager;
+    private MatchManager matchManager;
 
     public NetworkManager NetworkManager
     {
@@ -31,6 +31,13 @@ public class GlobalManager : MonoBehaviour
             return uiManager;
         }
     }
+    public MatchManager MatchManager
+    {
+        get
+        {
+            return matchManager;
+        }
+    }
 
 	private void Awake()
 	{
@@ -41,5 +48,12 @@ public class GlobalManager : MonoBehaviour
             Destroy(gameObject);
         }
 	}
-	
+
+    private void Start()
+    {
+        networkManager = GetComponent<NetworkManager>();
+        uiManager = GetComponent<UIManager>();
+        matchManager = GetComponent<MatchManager>();
+    }
+
 }

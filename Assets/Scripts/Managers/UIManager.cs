@@ -5,13 +5,12 @@ using UnityEngine;
 public class UIManager : Manager
 {
     [SerializeField]
-    private LobbyUIHandler lobbyHandler;
-
-    public LobbyUIHandler LobbyUIHandler
+    private LobbyUIManager lobbyUIManager;
+    public LobbyUIManager LobbyUIManager
     {
         get
         {
-            return lobbyHandler;
+            return lobbyUIManager;
         }
     }
 

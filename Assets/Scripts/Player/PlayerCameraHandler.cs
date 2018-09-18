@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerCameraHandler : PlayerHandler
 {
-    [SerializeField]
     private Camera playerCamera;
     private Transform cameraTransform { get { return playerCamera.transform; } }
     [SerializeField]
@@ -42,6 +41,13 @@ public class PlayerCameraHandler : PlayerHandler
     protected override void Start()
     {
         base.Start();
+
+        //Setup Camera
+        GameObject playerCameraObj = new GameObject();
+        playerCameraObj.AddComponent<Camera>();
+        playerCamera = playerCameraObj.GetComponent<Camera>();
+        if (!playerView.photonView.isMine)
+            playerCameraObj.GetComponent<Camera>().enabled = false;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
