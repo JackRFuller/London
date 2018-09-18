@@ -147,13 +147,13 @@ public class PlayerInputHandler : PlayerHandler
         if(Input.GetMouseButton(0))
         {
             playerView.PlayerShieldHandler.ChargeShieldThrow();
-            //playerView.PlayerShieldHandler.ThrowShield();
         }
         else if(Input.GetMouseButtonUp(0))
         {
             Debug.Log("Release");
             playerView.PlayerMovementHandler.FreezeMovement();
             playerView.PlayerAnimationHandler.ThrowShield();
+            playerView.PlayerUIHandler.HidePlayerChargeBar();
         }
     }
 

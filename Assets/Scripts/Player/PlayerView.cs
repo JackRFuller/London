@@ -12,6 +12,7 @@ public class PlayerView : Photon.MonoBehaviour
     private PlayerShieldHandler playerShieldHandler;
     private PlayerAnimationHandler playerAnimationHandler;
     private PlayerMeshHandler playerMeshHandler;
+    private PlayerUIHandler playerUIHandler;
     private PhotonView photonView;    
 
     public PlayerInputHandler PlayerInputHandler
@@ -58,6 +59,14 @@ public class PlayerView : Photon.MonoBehaviour
             return playerMeshHandler;
         }
     }
+    public PlayerUIHandler PlayerUIHandler
+    {
+        get
+        {
+            return playerUIHandler;
+        }
+    }
+
     public PhotonView PhotonView
     {
         get
@@ -66,6 +75,7 @@ public class PlayerView : Photon.MonoBehaviour
         }
     }
 
+   
     // Use this for initialization
     void Start ()
     {
@@ -75,6 +85,7 @@ public class PlayerView : Photon.MonoBehaviour
         playerMovementHandler = this.gameObject.GetComponent<PlayerMovementHandler>();
         playerAnimationHandler = this.gameObject.GetComponent<PlayerAnimationHandler>();
         playerShieldHandler = GetComponent<PlayerShieldHandler>();
+        playerUIHandler = GetComponent<PlayerUIHandler>();
 
         if(!photonView.isMine)
         {

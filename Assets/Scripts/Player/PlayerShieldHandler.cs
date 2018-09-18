@@ -7,11 +7,13 @@ public class PlayerShieldHandler : PlayerHandler
     [SerializeField]
     private Transform shieldSpawnPoint;    
     private ShieldView shieldView;
-  
+
+    private float shieldCharge;
     private float shieldSpeed;
 
-    private float shieldSpeedMin = 4;
-    private float shieldSpeedMax = 10;
+    private const float shieldChargeRate = 10;
+    private float shieldSpeedMin = 15;
+    private float shieldSpeedMax = 25;
 
     private ShieldState shieldEquippedState = ShieldState.Held;
     public enum ShieldState
@@ -33,7 +35,7 @@ public class PlayerShieldHandler : PlayerHandler
     {
         base.Start();
 
-        shieldSpeed = shieldSpeedMin;
+        shieldSpeed = 0;
 
         if(playerView.photonView.isMine)
         {
@@ -53,9 +55,12 @@ public class PlayerShieldHandler : PlayerHandler
 
     public void ChargeShieldThrow()
     {
-        shieldSpeed += 1 * Time.deltaTime;
-        if (shieldSpeed > shieldSpeedMax)
-            shieldSpeed = 10;
+        shieldCharge += shieldChargeRate * Time.deltaTime;
+
+        float diff = shieldSpeedMax - shieldSpeedMin;
+        float percentageComplete = shieldCharge / shieldSpeedMax;
+
+        playerView.PlayerUIHandler.ChargeBar(percentageComplete);
     }
 
     /// <summary>
@@ -76,9 +81,29 @@ public class PlayerShieldHandler : PlayerHandler
                 hitPoint = hit.point;
             }
 
-            shieldView.ShieldMovementHandler.ReleaseShield(hit.point);
+            float percentageComplete = shieldCharge / shieldSpeedMax;
+            shieldSpeed = shieldSpeedMax * percentageComplete;
+
+            if (percentageComplete < 0.5f)
+                shieldSpeed = shieldSpeedMin;
+
+            if (percentageComplete > 0.8f && percentageComplete <= 0.85f)
+                shieldSpeed = 30;
+
+            if (percentageComplete > 0.85f )
+                shieldSpeed = shieldSpeedMax;
+
+            shieldView.ShieldMovementHandler.ReleaseShield(hit.point,shieldSpeed);
             shieldEquippedState = ShieldState.Free;
+
+            ResetShieldValues();
         }
+    }
+
+    private void ResetShieldValues()
+    {
+        shieldSpeed = 0;
+        shieldCharge = 0;
     }
     
     public void SummonShield()

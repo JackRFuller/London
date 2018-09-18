@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShieldMovementHandler : ShieldHandler
 {
     private Transform startingPoint;
+    private float speed;
     private Vector3 travellingDirection;
     private MovementState movementState = MovementState.Held;
     private enum MovementState
@@ -28,8 +29,9 @@ public class ShieldMovementHandler : ShieldHandler
         startingPoint = shieldView.shieldHeldTransform;
     }
 
-    public void ReleaseShield(Vector3 targetDirection)
+    public void ReleaseShield(Vector3 targetDirection, float travellingSpeed)
     {
+        speed = travellingSpeed;
         travellingDirection = targetDirection - this.transform.position;
         travellingDirection.Normalize();
 
@@ -37,6 +39,8 @@ public class ShieldMovementHandler : ShieldHandler
         this.transform.eulerAngles = Vector3.zero;
 
         movementState = MovementState.Free;
+
+        Debug.Log("Shield Speed " + speed);
     }
 
     public void StartReturningProcess()
@@ -84,14 +88,14 @@ public class ShieldMovementHandler : ShieldHandler
 
     private void Move()
     {
-        transform.Translate(travellingDirection * 20 * Time.deltaTime);
+        transform.Translate(travellingDirection * speed * Time.deltaTime);
 
         Ray ray = new Ray(transform.position, travellingDirection);
         RaycastHit hit;
 
         Debug.DrawRay(ray.origin, ray.direction, Color.green,1);
 
-        if(Physics.Raycast(ray,out hit, 20 * Time.deltaTime + .1f))
+        if(Physics.Raycast(ray,out hit, speed * Time.deltaTime + .1f))
         {
             Vector3 reflectDir = Vector3.Reflect(ray.direction, hit.normal);
             reflectDir.Normalize();
