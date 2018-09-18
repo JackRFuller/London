@@ -14,6 +14,27 @@ public class MatchManager : Photon.MonoBehaviour
     [SerializeField]
     private Transform[] playerSpawnPoints;
 
+    [Header("Player Colours")]
+    [SerializeField]
+    private Material[] playerJointMaterials;
+    [SerializeField]
+    private Material[] playerSurfaceMaterials;
+
+    public Material[] PlayerJointMaterials
+    {
+        get
+        {
+            return playerJointMaterials;
+        }
+    }
+    public Material[] PlayerSurfaceMaterials
+    {
+        get
+        {
+            return playerSurfaceMaterials;
+        }       
+    }
+
     private void Start()
     {
         photonView = this.GetComponent<PhotonView>();
@@ -31,6 +52,9 @@ public class MatchManager : Photon.MonoBehaviour
         if (StartMatchTriggered != null)
             StartMatchTriggered();
 
-        PhotonNetwork.Instantiate("ShieldThrower", playerSpawnPoints[0].position, Quaternion.identity, 0);
+        int playerPos = PhotonNetwork.player.ID;
+        Debug.Log(playerPos);
+
+        PhotonNetwork.Instantiate("ShieldThrower", playerSpawnPoints[playerPos].position, Quaternion.identity, 0);
     }
 }

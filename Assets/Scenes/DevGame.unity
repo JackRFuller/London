@@ -2316,6 +2316,22 @@ MonoBehaviour:
   - {fileID: 1310024543}
   - {fileID: 804245680}
   - {fileID: 576683074}
+  playerJointMaterials:
+  - {fileID: 2100000, guid: 037c4f187b42dc44baba967551017199, type: 2}
+  - {fileID: 2100000, guid: 360634e28cd7d2f4a8fa3f964953887f, type: 2}
+  - {fileID: 2100000, guid: 9fb6f2e60f0d1b444b328bdb88432456, type: 2}
+  - {fileID: 2100000, guid: 5df86ac7ef894e745b6e5bdcb8253377, type: 2}
+  - {fileID: 2100000, guid: 422ff0334677b794383e2378d3bd9ec2, type: 2}
+  - {fileID: 2100000, guid: c969be679bf409842acfa6c24e88ab21, type: 2}
+  - {fileID: 2100000, guid: 4bc35110cfe70eb4a8952ef2365fdcfa, type: 2}
+  playerSurfaceMaterials:
+  - {fileID: 2100000, guid: cbbf7b9b5d9d4494986a36ce86afba23, type: 2}
+  - {fileID: 2100000, guid: b081ed3be69a94d478587f3339159198, type: 2}
+  - {fileID: 2100000, guid: 09b34b6409cb75f4495175564221742d, type: 2}
+  - {fileID: 2100000, guid: 6acb627009181854e9c04b74595fadf0, type: 2}
+  - {fileID: 2100000, guid: 4018f88cc0de7fb42af85c62e904134b, type: 2}
+  - {fileID: 2100000, guid: bdb263f52e9553d44b48899b25771f9d, type: 2}
+  - {fileID: 2100000, guid: 588e31e9cc31e0542a2ac73aec46b7ec, type: 2}
 --- !u!114 &1113720605
 MonoBehaviour:
   m_ObjectHideFlags: 0

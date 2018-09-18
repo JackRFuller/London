@@ -11,6 +11,7 @@ public class PlayerView : Photon.MonoBehaviour
     private PlayerMovementHandler playerMovementHandler;
     private PlayerShieldHandler playerShieldHandler;
     private PlayerAnimationHandler playerAnimationHandler;
+    private PlayerMeshHandler playerMeshHandler;
     private PhotonView photonView;    
 
     public PlayerInputHandler PlayerInputHandler
@@ -50,6 +51,13 @@ public class PlayerView : Photon.MonoBehaviour
             return playerAnimationHandler;
         }        
     }
+    public PlayerMeshHandler PlayerMeshHandler
+    {
+        get
+        {
+            return playerMeshHandler;
+        }
+    }
     public PhotonView PhotonView
     {
         get
@@ -57,9 +65,6 @@ public class PlayerView : Photon.MonoBehaviour
             return photonView;
         }
     }
-
-    //Temp
-    Quaternion realRotation;
 
     // Use this for initialization
     void Start ()
@@ -78,27 +83,4 @@ public class PlayerView : Photon.MonoBehaviour
             playerAnimationHandler.enabled = false;
         }
 	}
-
-    private void Update()
-    {
-        if(!photonView.isMine)
-        {
-            transform.rotation = Quaternion.Lerp(transform.rotation, realRotation, .1f);
-        }
-    }
-
-    void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.isWriting)
-        {
-            stream.SendNext(transform.rotation);
-        }
-        else
-        {
-            //realRotation = (Quaternion)stream.ReceiveNext();
-        }
-    }
-
-
-
 }

@@ -1847,7 +1847,8 @@ public static class PhotonNetwork
         {
 
             return false;
-            Debug.LogError("JoinOrCreateRoom failed. Client is not on Master Server or not yet ready to call operations. Wait for callback: OnJoinedLobby or OnConnectedToMaster.");        }
+        }
+           
         if (string.IsNullOrEmpty(roomName))
         {
             Debug.LogError("JoinOrCreateRoom failed. A roomname is required. If you don't know one, how will you join?");
