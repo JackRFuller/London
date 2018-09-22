@@ -27,6 +27,7 @@ public class ShieldMovementHandler : ShieldHandler
 
         GameObject startingPointObj = Instantiate(new GameObject(), this.transform.position, this.transform.rotation,this.transform.parent);
         startingPoint = shieldView.shieldHeldTransform;
+        shieldView.PlayerView.PlayerHealthHandler.Respawn.AddListener(SetShieldBackToPlayerUponRespawn);
     }
 
     public void ReleaseShield(Vector3 targetDirection, float travellingSpeed)
@@ -54,6 +55,7 @@ public class ShieldMovementHandler : ShieldHandler
 
     private IEnumerator InitReturn()
     {
+        shieldView.ShieldRB.velocity = Vector3.zero;
         yield return new WaitForSeconds(0.1f);
         lerpingAttributes.startPosition = this.transform.position;
         lerpingAttributes.targetPosition = startingPoint.position;
@@ -62,7 +64,7 @@ public class ShieldMovementHandler : ShieldHandler
         movementState = MovementState.Returning;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         
         switch (movementState)
@@ -88,7 +90,7 @@ public class ShieldMovementHandler : ShieldHandler
 
     private void Move()
     {
-        transform.Translate(travellingDirection * speed * Time.deltaTime);
+        shieldView.ShieldRB.velocity = (travellingDirection * speed);
 
         Ray ray = new Ray(transform.position, travellingDirection);
         RaycastHit hit;
@@ -97,9 +99,12 @@ public class ShieldMovementHandler : ShieldHandler
 
         if(Physics.Raycast(ray,out hit, speed * Time.deltaTime + .1f))
         {
-            Vector3 reflectDir = Vector3.Reflect(ray.direction, hit.normal);
-            reflectDir.Normalize();
-            travellingDirection = reflectDir;
+            if(hit.collider.tag != "Player")
+            {
+                Vector3 reflectDir = Vector3.Reflect(ray.direction, hit.normal);
+                reflectDir.Normalize();
+                travellingDirection = reflectDir;
+            }
         }
     }
 
@@ -120,6 +125,17 @@ public class ShieldMovementHandler : ShieldHandler
             shieldView.PlayerView.PlayerShieldHandler.SetShieldStateToHeld();
             movementState = MovementState.Held;
         }
+    }
+
+    /// <summary>
+    /// Triggered by Respawn event from Player's Health Handler
+    /// </summary>
+    private void SetShieldBackToPlayerUponRespawn()
+    {
+        this.transform.position = startingPoint.position;
+        this.transform.rotation = startingPoint.rotation;
+        shieldView.PlayerView.PlayerShieldHandler.SetShieldStateToHeld();
+        movementState = MovementState.Held;
     }
 
    

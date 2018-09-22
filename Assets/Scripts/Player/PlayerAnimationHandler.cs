@@ -10,18 +10,9 @@ public class PlayerAnimationHandler : PlayerHandler
     {
         base.Start();
         playerAnimController = GetComponent<Animator>();
-    }
 
-    public void SetMovementAnimation(bool running, Vector2 input, float smoothTime, Vector3 controllerVelocity, float runSpeed, float walkSpeed)
-    {
-        //Used for animation
-
-
-
-        //float currentSpeed = new Vector2(controllerVelocity.x, controllerVelocity.z).magnitude;
-        //float animationSpeedPercent = (running ? 1 : .5f) * input.magnitude;
-        //playerAnimController.SetFloat("speedPercent", animationSpeedPercent, smoothTime, Time.deltaTime);
-    }
+        playerView.PlayerHealthHandler.Respawn.AddListener(Respawn);
+    }    
 
     public void SetMovementAnimations(Vector3 controllerVelocity,bool isRunning,Vector2 inputDir,Vector2 inputDirRaw)
     {
@@ -71,6 +62,21 @@ public class PlayerAnimationHandler : PlayerHandler
     public void ThrowShield()
     {
         playerAnimController.SetTrigger("ThrowShield");
+    }
+
+    public void Dead()
+    {
+        playerAnimController.SetBool("isReviving", false);
+        playerAnimController.SetBool("isDead", true);
+    }
+
+    /// <summary>
+    /// Listens for Respawn Event trigger from Health Handler
+    /// </summary>
+    public void Respawn()
+    {
+        playerAnimController.SetBool("isReviving", true);
+        playerAnimController.SetBool("isDead", false);
     }
 
     IEnumerator EmoteCooldown()

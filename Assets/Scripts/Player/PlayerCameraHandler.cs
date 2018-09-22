@@ -64,8 +64,11 @@ public class PlayerCameraHandler : PlayerHandler
         pitch += _pitch * mouseSensitivity;
         pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);
 
-        currentRotation = Vector3.SmoothDamp(currentRotation, new Vector3(pitch, yaw), ref rotationSmoothVelocity, rotationSmoothTime);        
-        cameraTransform.eulerAngles = currentRotation;
+        if (playerView.PlayerHealthHandler.PlayerState == PlayerHealthHandler.PlayerHealthState.Alive)
+        {
+            currentRotation = Vector3.SmoothDamp(currentRotation, new Vector3(pitch, yaw), ref rotationSmoothVelocity, rotationSmoothTime);
+            cameraTransform.eulerAngles = currentRotation;
+        }
 
         //Offset
         cameraTransform.position = targetTransform.position - cameraTransform.forward * distanceFromTarget;

@@ -6,6 +6,7 @@ public class ShieldView : MonoBehaviour
 {
     private PlayerView playerView;
     private PhotonView photonView;
+    private Rigidbody shieldRB;
 
     private ShieldMovementHandler shieldMovementHandler;
     public ShieldMovementHandler ShieldMovementHandler
@@ -16,6 +17,13 @@ public class ShieldView : MonoBehaviour
         }
     }
 
+    public Rigidbody ShieldRB
+    {
+        get
+            {
+            return shieldRB;
+            }
+    }
     public PlayerView PlayerView
     {
         get
@@ -37,6 +45,7 @@ public class ShieldView : MonoBehaviour
     private void Start()
     {
         photonView = GetComponent<PhotonView>();
+        shieldRB = GetComponent<Rigidbody>();
         shieldMovementHandler = GetComponent<ShieldMovementHandler>();
 
         if(!photonView.isMine)

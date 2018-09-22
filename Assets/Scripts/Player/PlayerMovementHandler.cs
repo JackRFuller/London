@@ -23,6 +23,8 @@ public class PlayerMovementHandler : PlayerHandler
     [SerializeField]
     private float airControlPercent;
 
+    private Vector3 startingSpawnPoint;
+
     private float speedSmoothVelocity;
     private float currentSpeed;
     private float turnSmoothVelocity;
@@ -41,7 +43,12 @@ public class PlayerMovementHandler : PlayerHandler
     protected override void Start()
     {
         base.Start();       
-        playerCC = GetComponent<CharacterController>();      
+
+        playerCC = GetComponent<CharacterController>();
+
+        playerView.PlayerHealthHandler.Respawn.AddListener(ResetMovementAndPosition);
+
+        startingSpawnPoint = transform.position;
     }
 
     private void Update()
@@ -77,10 +84,20 @@ public class PlayerMovementHandler : PlayerHandler
             moveDirection *= 2;
         }
 
-        float targetRotation = playerView.PlayerCameraHandler.CameraTransform.eulerAngles.y;
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x,targetRotation,transform.eulerAngles.z);
+        //Ignore X and Z Input if Player is Dead
+        if (playerView.PlayerHealthHandler.PlayerState == PlayerHealthHandler.PlayerHealthState.Alive)
+        {
+            float targetRotation = playerView.PlayerCameraHandler.CameraTransform.eulerAngles.y;
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, targetRotation, transform.eulerAngles.z);
+        }
+        else
+        {
+            moveDirection.x = 0;
+            moveDirection.z = 0;
+        }
 
-        moveDirection.y += Time.deltaTime * gravity;      
+        moveDirection.y += Time.deltaTime * gravity;         
+
         playerCC.Move(moveDirection * Time.deltaTime);
         playerView.PlayerAnimationHandler.SetMovementAnimations(playerCC.velocity, running,inputDirection, inputDirectionRaw);
 
@@ -165,7 +182,11 @@ public class PlayerMovementHandler : PlayerHandler
 
     public void FreeMovement()
     {
-        movementState = MovementState.Free;
-        Debug.Log("Free");
+        movementState = MovementState.Free;      
+    }
+
+    private void ResetMovementAndPosition()
+    {
+        this.transform.position = startingSpawnPoint;
     }
 }
