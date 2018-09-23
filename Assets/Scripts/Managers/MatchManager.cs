@@ -95,8 +95,6 @@ public class MatchManager : Manager
             }
         }
 
-        PlayerScore playerScoreTemp = new PlayerScore("temp");
-
         playerScoreList = playerScoreList.OrderByDescending(o => o.playerScore).ToList();
 
         if (SortedPlayerScoreList != null)

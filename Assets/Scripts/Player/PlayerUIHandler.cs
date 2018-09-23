@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerUIHandler : PlayerHandler
 {
@@ -14,6 +15,10 @@ public class PlayerUIHandler : PlayerHandler
     [SerializeField]
     private Image playerChargeBarImage;
 
+    [Header("Player Messages")]
+    [SerializeField]
+    private TMP_Text playerMessageText;
+
 
     protected override void Start()
     {
@@ -23,7 +28,8 @@ public class PlayerUIHandler : PlayerHandler
         {
             playerCanvasObj.SetActive(false);
         }
-        
+
+        playerMessageText.enabled = false;
         HidePlayerChargeBar();
     }
 
@@ -43,6 +49,26 @@ public class PlayerUIHandler : PlayerHandler
     {
         playerChargeBarObj.SetActive(false);
         playerChargeBarImage.fillAmount = 0;
+    }
+
+    public void ShowMessage(string message, float showTime)
+    {
+        if(photonView.isMine)
+        {
+            playerMessageText.enabled = true;
+            playerMessageText.text = message;
+
+            if (showTime > 0)
+            {
+                StartCoroutine(HidePlayerMessageAfterElapsedTime(showTime));
+            }
+        }
+    }
+
+    IEnumerator HidePlayerMessageAfterElapsedTime(float messageTime)
+    {
+        yield return new WaitForSeconds(messageTime);
+        playerMessageText.enabled = false;
     }
 
     

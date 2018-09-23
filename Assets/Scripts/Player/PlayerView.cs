@@ -94,6 +94,7 @@ public class PlayerView : Photon.MonoBehaviour
         playerShieldHandler = GetComponent<PlayerShieldHandler>();
         playerHealthHandler = GetComponent<PlayerHealthHandler>();
         playerUIHandler = GetComponent<PlayerUIHandler>();
+        playerMeshHandler = GetComponent<PlayerMeshHandler>();
 
         if(!photonView.isMine)
         {

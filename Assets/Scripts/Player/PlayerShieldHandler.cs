@@ -65,7 +65,6 @@ public class PlayerShieldHandler : PlayerHandler
     {
         shieldCharge += shieldChargeRate * Time.deltaTime;
 
-        float diff = shieldSpeedMax - shieldSpeedMin;
         float percentageComplete = shieldCharge / shieldSpeedMax;
 
         playerView.PlayerUIHandler.ChargeBar(percentageComplete);

@@ -52,6 +52,7 @@ public class PlayerHealthHandler : PlayerHandler
                         }
 
                         GlobalManager.Instance.MatchManager.PhotonView.RPC("PlayerScored", PhotonTargets.All, playersName);
+                        playerView.PlayerUIHandler.ShowMessage("Killed By " + playersName, 5.0f);
 
                         playerHealthState = PlayerHealthState.Dead;
                         playerView.PlayerAnimationHandler.Dead();

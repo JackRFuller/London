@@ -150,7 +150,6 @@ public class PlayerInputHandler : PlayerHandler
         }
         else if(Input.GetMouseButtonUp(0))
         {
-            Debug.Log("Release");
             playerView.PlayerMovementHandler.FreezeMovement();
             playerView.PlayerAnimationHandler.ThrowShield();
             playerView.PlayerUIHandler.HidePlayerChargeBar();

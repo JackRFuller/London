@@ -24,8 +24,7 @@ public class ShieldMovementHandler : ShieldHandler
     protected override void Start()
     {
         base.Start();
-
-        GameObject startingPointObj = Instantiate(new GameObject(), this.transform.position, this.transform.rotation,this.transform.parent);
+       
         startingPoint = shieldView.shieldHeldTransform;
         shieldView.PlayerView.PlayerHealthHandler.Respawn.AddListener(SetShieldBackToPlayerUponRespawn);
     }
@@ -40,8 +39,6 @@ public class ShieldMovementHandler : ShieldHandler
         this.transform.eulerAngles = Vector3.zero;
 
         movementState = MovementState.Free;
-
-        Debug.Log("Shield Speed " + speed);
     }
 
     public void StartReturningProcess()

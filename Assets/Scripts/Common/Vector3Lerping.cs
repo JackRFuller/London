@@ -18,9 +18,8 @@ public class Vector3Lerping
     public bool isReturning;
 
     public float GetLerpingProgress(float timeStarted, float lerpSpeed)
-    {
-        float percentageComplete = 0;
+    {       
         float timeSinceStarted = Time.time - timeStarted;
-        return percentageComplete = timeSinceStarted / lerpSpeed;
+        return timeSinceStarted / lerpSpeed;
     }
 }
