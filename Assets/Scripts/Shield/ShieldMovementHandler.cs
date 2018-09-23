@@ -56,7 +56,7 @@ public class ShieldMovementHandler : ShieldHandler
     private IEnumerator InitReturn()
     {
         shieldView.ShieldRB.velocity = Vector3.zero;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
         lerpingAttributes.startPosition = this.transform.position;
         lerpingAttributes.targetPosition = startingPoint.position;
 
@@ -66,7 +66,6 @@ public class ShieldMovementHandler : ShieldHandler
 
     private void FixedUpdate()
     {
-        
         switch (movementState)
         {
             case MovementState.Free:
@@ -79,7 +78,6 @@ public class ShieldMovementHandler : ShieldHandler
                 SetHeldPosition();
                 break;
         }
-        
     }
 
     private void SetHeldPosition()
@@ -110,18 +108,22 @@ public class ShieldMovementHandler : ShieldHandler
 
     private void Return()
     {
-        float lerpingProgress = lerpingAttributes.GetLerpingProgress(lerpingAttributes.timeStarted, lerpingAttributes.lerpSpeed);
-        Vector3 newPosition = Vector3.Lerp(lerpingAttributes.startPosition, startingPoint.position, lerpingAttributes.animationCurve.Evaluate(lerpingProgress));
+        float distance = Vector3.Distance(transform.position, startingPoint.position);
 
-        this.transform.position = newPosition;
+        float returnSpeed = 10;
 
-        if(lerpingProgress > 0.9f)
+        if (distance > 100)
+            returnSpeed = 30;
+
+        Vector3 direction = startingPoint.position - transform.position;
+
+        shieldView.ShieldRB.velocity = direction * returnSpeed;
+
+
+        if(distance <= 0.75f)
         {
+            shieldView.ShieldRB.velocity = Vector3.zero;
             this.transform.rotation = startingPoint.rotation;
-        }
-
-        if(lerpingProgress >= 1.0f)
-        {
             shieldView.PlayerView.PlayerShieldHandler.SetShieldStateToHeld();
             movementState = MovementState.Held;
         }

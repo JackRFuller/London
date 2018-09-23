@@ -31,6 +31,14 @@ public class PlayerShieldHandler : PlayerHandler
         }
     }
 
+    public ShieldView ShieldView
+    {
+        get
+        {
+            return shieldView;
+        }
+    }
+
     protected override void Start()
     {
         base.Start();

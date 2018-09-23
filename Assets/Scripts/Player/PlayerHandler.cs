@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon;
 
-public class PlayerHandler : MonoBehaviour
+public class PlayerHandler : Photon.MonoBehaviour
 {
     protected PlayerView playerView;
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Photon;
 
 public class PlayerHealthHandler : PlayerHandler
 {
@@ -28,15 +29,30 @@ public class PlayerHealthHandler : PlayerHandler
     {
         if(other.tag.Equals("Shield"))
         {
-            PlayerView shieldPlayerView = other.GetComponent<ShieldView>().PlayerView;
-
+            ShieldView shieldView = other.GetComponent<ShieldView>();
+           
             //Check the shield isn't mine
-            if(shieldPlayerView != playerView)
+            if(shieldView != playerView.PlayerShieldHandler.ShieldView)
             {
                 if(playerHealthState != PlayerHealthState.Dead)
                 {
                     if(playerView.photonView.isMine)
                     {
+                        int shieldOwner = shieldView.PhotonView.ownerId;
+
+                        string playersName = null;
+
+                        for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
+                        {
+                            if (PhotonNetwork.playerList[i].ID == shieldOwner)
+                            {
+                                playersName = PhotonNetwork.playerList[i].NickName;
+                                break;
+                            }
+                        }
+
+                        GlobalManager.Instance.MatchManager.PhotonView.RPC("PlayerScored", PhotonTargets.All, playersName);
+
                         playerHealthState = PlayerHealthState.Dead;
                         playerView.PlayerAnimationHandler.Dead();
 

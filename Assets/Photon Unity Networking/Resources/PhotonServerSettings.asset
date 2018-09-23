@@ -43,4 +43,5 @@ MonoBehaviour:
   - RequestForPickupTimes
   - TaggedPlayer
   - StartMatch
+  - PlayerScored
   DisableAutoOpenWizard: 1

@@ -9,7 +9,6 @@ public class NetworkManager : Photon.MonoBehaviour
     public UnityAction ConnectedToMaster;
     public UnityAction JoinedRoom;
     public UnityAction PhotonPlayerConnected;
-
     private string playerName;
 
     private void Start()
@@ -29,8 +28,7 @@ public class NetworkManager : Photon.MonoBehaviour
     public virtual void JoinLobby()
     {
         playerName = GlobalManager.Instance.UIManager.LobbyUIManager.PlayerLaunchUIHandler.PlayerName;
-
-        PhotonNetwork.player.NickName = playerName;
+        
         PhotonNetwork.JoinOrCreateRoom("New", null, null);
     }
 
@@ -39,20 +37,22 @@ public class NetworkManager : Photon.MonoBehaviour
         if (string.IsNullOrEmpty(playerName))
             playerName = "Player" + PhotonNetwork.playerList.Length.ToString();
 
+        PhotonNetwork.player.NickName = playerName;
+
         if (JoinedRoom != null)
             JoinedRoom();
     }
 
     public virtual void OnPhotonPlayerConnected(PhotonPlayer player)
     {
-        StartCoroutine(WaitForPlayerToFullyConnectToLobby());
+        StartCoroutine(WaitForPlayerToFullyConnectToLobby(player));
     }
 
     /// <summary>
     /// Buffer to make sure player's name has been set
     /// </summary>
     /// <returns></returns>
-    IEnumerator WaitForPlayerToFullyConnectToLobby()
+    IEnumerator WaitForPlayerToFullyConnectToLobby(PhotonPlayer player)
     {
         yield return new WaitForSeconds(1.0f);
         if (PhotonPlayerConnected != null)
